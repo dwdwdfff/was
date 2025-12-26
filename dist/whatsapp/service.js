@@ -210,10 +210,10 @@ class WhatsappService {
                 ? handleSSEConnectionUpdate
                 : handleNormalConnectionUpdate;
             const { state, saveCreds } = yield (0, store_1.useSession)(sessionId);
-            const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: false, generateHighQualityLinkPreview: true }, socketConfig), { auth: {
+            const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: true, generateHighQualityLinkPreview: true }, socketConfig), { auth: {
                     creds: state.creds,
                     keys: (0, baileys_1.makeCacheableSignalKeyStore)(state.keys, utils_1.logger),
-                }, version: [2, 3000, 1025190524], logger: utils_1.logger, shouldIgnoreJid: (jid) => (0, baileys_1.isJidBroadcast)(jid), getMessage: (key) => __awaiter(this, void 0, void 0, function* () {
+                }, logger: utils_1.logger, shouldIgnoreJid: (jid) => (0, baileys_1.isJidBroadcast)(jid), getMessage: (key) => __awaiter(this, void 0, void 0, function* () {
                     const data = yield database_1.prisma.message.findFirst({
                         where: { remoteJid: key.remoteJid, id: key.id, sessionId },
                     });
