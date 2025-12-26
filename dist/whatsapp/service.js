@@ -210,7 +210,16 @@ class WhatsappService {
                 ? handleSSEConnectionUpdate
                 : handleNormalConnectionUpdate;
             const { state, saveCreds } = yield (0, store_1.useSession)(sessionId);
-            const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: false, generateHighQualityLinkPreview: true }, socketConfig), { auth: {
+            let waVersion;
+            try {
+                const versionResult = yield (0, baileys_1.fetchLatestBaileysVersion)();
+                waVersion = versionResult.version;
+                utils_1.logger.info({ version: waVersion }, "Fetched latest WhatsApp version");
+            } catch (e) {
+                waVersion = [2, 3000, 1015901307];
+                utils_1.logger.warn({ version: waVersion }, "Failed to fetch latest version, using fallback");
+            }
+            const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: false, generateHighQualityLinkPreview: true }, socketConfig), { version: waVersion, auth: {
                     creds: state.creds,
                     keys: (0, baileys_1.makeCacheableSignalKeyStore)(state.keys, utils_1.logger),
                 }, logger: utils_1.logger, shouldIgnoreJid: (jid) => (0, baileys_1.isJidBroadcast)(jid), getMessage: (key) => __awaiter(this, void 0, void 0, function* () {
